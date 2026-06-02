@@ -19,25 +19,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="Department")
+@Table(name="departments")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Department {
 	
 	@Id
-	@Column(name="Department ID")
+	@Column(name="id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id; 
 	
-	@Column(name="Department Name", unique = true)
+	@Column(name="department_name", unique = true)
 	@NotBlank(message = "Name is required")
-	@JsonProperty("DeptName")
 	private String departmentName;
 	
-	@Column(name="Department Location")
+	@Column(name="location")
 	@NotBlank(message = "Location is required")
-	@JsonProperty("DeptLoc")
 	private String location;
 	
 	@OneToMany(

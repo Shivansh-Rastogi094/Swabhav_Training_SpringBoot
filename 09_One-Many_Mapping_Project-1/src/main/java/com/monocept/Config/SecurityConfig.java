@@ -21,42 +21,35 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(csrf -> csrf.disable())
-
                 .authorizeHttpRequests(auth -> auth
-
+                        // Public Swagger UI and API Docs
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**")
+                        .permitAll()
+                        
                         // USER or ADMIN
-                        .requestMatchers(HttpMethod.GET,
-                                "/api/departments/**")
+                        .requestMatchers(HttpMethod.GET, "/api/departments/**")
                         .hasAnyRole("USER", "ADMIN")
 
                         // ADMIN only
-                        .requestMatchers(HttpMethod.POST,
-                                "/api/departments/**")
+                        .requestMatchers(HttpMethod.POST, "/api/departments/**")
                         .hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.PUT,
-                                "/api/departments/**")
+                        .requestMatchers(HttpMethod.PUT, "/api/departments/**")
                         .hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.DELETE,
-                                "/api/departments/**")
+                        .requestMatchers(HttpMethod.DELETE, "/api/departments/**")
                         .hasRole("ADMIN")
 
                         .anyRequest().authenticated())
-
                 .httpBasic(Customizer.withDefaults())
-
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(
-                                SessionCreationPolicy.STATELESS));
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
 
     @Bean
-    UserDetailsService userDetailsService(
-            PasswordEncoder passwordEncoder) {
-
+    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails admin = User.builder()
                 .username("admin")
                 .password(passwordEncoder.encode("admin123"))
@@ -73,7 +66,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

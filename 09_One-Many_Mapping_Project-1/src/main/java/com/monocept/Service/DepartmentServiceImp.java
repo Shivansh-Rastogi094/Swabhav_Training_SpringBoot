@@ -89,9 +89,37 @@ public class DepartmentServiceImp implements DepartmentService {
 	}
 
 	@Override
-	public PageResponseDto<DepartmentResponseDto> getAllStudentsWithPagination(int pageNumber, int pageSize) {
-		// TODO Auto-generated method stub
-		return null;
+	public PageResponseDto<DepartmentResponseDto> getAllDepartmentsWithPagination(int pageNumber, int pageSize) {
+		log.info("Fetching departments with pagination: pageNumber={}, pageSize={}", pageNumber, pageSize);
+		validatePagination(pageNumber, pageSize);
+		
+		org.springframework.data.domain.Page<Department> page = deptRepo.findAll(org.springframework.data.domain.PageRequest.of(pageNumber, pageSize));
+		List<DepartmentResponseDto> content = page.getContent().stream()
+				.map(dept -> modelMap.map(dept, DepartmentResponseDto.class))
+				.toList();
+		
+		PageResponseDto<DepartmentResponseDto> response = new PageResponseDto<>();
+		response.setContent(content);
+		response.setPageNumber(page.getNumber());
+		response.setPageSize(page.getSize());
+		response.setTotalElements(page.getTotalElements());
+		response.setTotalPages(page.getTotalPages());
+		response.setLastPage(page.isLast());
+		
+		log.info("Successfully fetched paginated departments");
+		return response;
+	}
+
+	private void validatePagination(int pageNumber, int pageSize) {
+		if (pageNumber < 0) {
+			throw new IllegalArgumentException("Page number must not be negative");
+		}
+		if (pageSize <= 0) {
+			throw new IllegalArgumentException("Page size must be greater than zero");
+		}
+		if (pageSize > 100) {
+			throw new IllegalArgumentException("Page size must not exceed 100");
+		}
 	}
 
 	@Override
@@ -119,8 +147,6 @@ public class DepartmentServiceImp implements DepartmentService {
 		// check if department exsists
 		Department department =deptRepo.findById(departmentId).orElseThrow(()-> new ResourceNotFoundException(departmentId));
 		
-		log.warn("Department not found with id: {}",
-		        departmentId);
 		// check duplicate dept name for others
 		if(deptRepo.existsByDepartmentNameAndIdNot(requestDto.getDepartmentName(), departmentId)) {
 			log.warn("Department name already exists: {}",
@@ -129,7 +155,7 @@ public class DepartmentServiceImp implements DepartmentService {
 		}
 		// check for duplicate emp email in other depts
 		for(EmployeeRequestDto empDto : requestDto.getEmployees()) {
-			if(empRepo.existsByEmailAndIdNot(empDto.getEmail(),departmentId)) {
+			if(empRepo.existsByEmailAndDepartmentIdNot(empDto.getEmail(),departmentId)) {
 				log.warn("Employee email already exists: {}",
 				        empDto.getEmail());
 				throw new DuplicateResourceException("Duplicate employee email, already present in another department");

@@ -36,8 +36,8 @@ public class DepartmentController {
 	public ResponseEntity<DepartmentResponseDto> createDepartment(@Valid @RequestBody DepartmentRequestDto requestDto)
 			throws DuplicateResourceException {
 
-		DepartmentResponseDto response = departmentService.createDepartment(requestDto);
 		log.info("Received request to create department: {}", requestDto.getDepartmentName());
+		DepartmentResponseDto response = departmentService.createDepartment(requestDto);
 
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
@@ -56,9 +56,10 @@ public class DepartmentController {
 
 			@RequestParam(defaultValue = "0") int pageNumber,
 
-			@RequestParam(defaultValue = "10") int pageSize) {
-
-		return ResponseEntity.ok(departmentService.getAllStudentsWithPagination(pageNumber, pageSize));
+			@RequestParam(defaultValue = "5") int pageSize) {
+		
+		log.info("Received request to fetch departments with pagination: pageNumber={}, pageSize={}", pageNumber, pageSize);
+		return ResponseEntity.ok(departmentService.getAllDepartmentsWithPagination(pageNumber, pageSize));
 	}
 
 	// GET DEPARTMENT BY ID

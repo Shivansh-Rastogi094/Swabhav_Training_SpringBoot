@@ -18,7 +18,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="Employees")
+@Table(name="employees")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,26 +26,23 @@ public class Employee {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="Employee Id")
+	@Column(name="id")
 	private long id;
 	
-	@Column(name="Employee Name")
-	@JsonProperty("EmpName")
+	@Column(name="employee_name")
 	@NotBlank(message = "Name is required")
 	private String employeeName;
 	
-	@Column(name="Employee Email", unique = true)
+	@Column(name="email", unique = true)
 	@NotBlank(message = "Email is required")
-	@JsonProperty("EmpMail")
 	private String email;
 	
-	@Column(name="Employee Salary")
-	@JsonProperty("EmpSal")
+	@Column(name="salary")
 	@NotNull(message = "Salary cannot be blank")
 	@Min(value = 1, message = "Salary should be greater than 0")
 	private double salary;
 	
 	@ManyToOne
-	@JoinColumn(name="Department Id")
+	@JoinColumn(name="department_id")
 	private Department department;
 }

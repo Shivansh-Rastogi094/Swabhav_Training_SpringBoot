@@ -1,0 +1,498 @@
+{
+  "info": {
+    "name": "Student Course Many-to-Many API",
+    "description": "Ready-to-import collection for the many-to-many Student-Course API with database-based Basic Auth security.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{adminUsername}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{adminPassword}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "adminUsername",
+      "value": "admin",
+      "type": "string"
+    },
+    {
+      "key": "adminPassword",
+      "value": "admin123",
+      "type": "string"
+    },
+    {
+      "key": "userUsername",
+      "value": "user",
+      "type": "string"
+    },
+    {
+      "key": "userPassword",
+      "value": "user123",
+      "type": "string"
+    },
+    {
+      "key": "courseId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "studentId",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Course APIs - ADMIN",
+      "item": [
+        {
+          "name": "Create Course - Java Full Stack",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course_name\": \"Java Full Stack\",\n  \"course_code\": \"JAVA-FS-101\",\n  \"fees\": 25000\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                  "let data = pm.response.json();",
+                  "if (data.id) { pm.collectionVariables.set('courseId', data.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Course - Spring Boot",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course_name\": \"Spring Boot\",\n  \"course_code\": \"SPRING-101\",\n  \"fees\": 18000\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Courses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Courses Page",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/page?pageNumber=0&pageSize=5&sortBy=id&sortDirection=asc",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Students By Course ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}/students",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Course",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course_name\": \"Java Full Stack Updated\",\n  \"course_code\": \"JAVA-FS-102\",\n  \"fees\": 30000\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Course",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Student APIs - ADMIN",
+      "item": [
+        {
+          "name": "Create Student With Courses",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/students",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Rahul Sharma\",\n  \"email\": \"rahul@gmail.com\",\n  \"age\": 21,\n  \"course_ids\": [\n    1,\n    2\n  ]\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                  "let data = pm.response.json();",
+                  "if (data.id) { pm.collectionVariables.set('studentId', data.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get All Students",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/students",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Students Page",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/students/page?pageNumber=0&pageSize=5&sortBy=id&sortDirection=asc",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Student By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/students/{{studentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Courses By Student ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/students/{{studentId}}/courses",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Student",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/students/{{studentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Rahul Kumar Sharma\",\n  \"email\": \"rahul.updated@gmail.com\",\n  \"age\": 22,\n  \"course_ids\": [\n    1\n  ]\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Assign Course To Student",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/students/{{studentId}}/courses/2",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Course From Student",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/students/{{studentId}}/courses/2",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Student",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/students/{{studentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "USER Read Only Tests",
+      "auth": {
+        "type": "basic",
+        "basic": [
+          {
+            "key": "username",
+            "value": "{{userUsername}}",
+            "type": "string"
+          },
+          {
+            "key": "password",
+            "value": "{{userPassword}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "USER - Get All Students",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/students",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "USER - Get All Courses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "USER - Create Course Should Fail 403",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/courses",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course_name\": \"Blocked\",\n  \"course_code\": \"BLOCKED-101\",\n  \"fees\": 1000\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Should be 403', function () { pm.response.to.have.status(403); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Swagger / OpenAPI",
+      "auth": {
+        "type": "noauth"
+      },
+      "item": [
+        {
+          "name": "OpenAPI JSON",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v3/api-docs",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Swagger UI HTML",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/swagger-ui.html",
+              "host": [
+                "{{baseUrl}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
