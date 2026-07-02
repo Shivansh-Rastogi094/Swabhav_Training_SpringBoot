@@ -16,14 +16,15 @@ import com.swabhav.demo.dto.EmployeeResponse;
 import com.swabhav.demo.service.EmployeeService;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/employees")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class EmployeeController {
 
-    private final EmployeeService employeeService;
+    private  EmployeeService employeeService;
 
     @PostMapping
     public ResponseEntity<EmployeeResponse> createEmployee(

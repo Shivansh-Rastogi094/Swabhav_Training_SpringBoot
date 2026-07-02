@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class EmployeeRequest {
 
     @NotBlank(message = "Employee name is required")

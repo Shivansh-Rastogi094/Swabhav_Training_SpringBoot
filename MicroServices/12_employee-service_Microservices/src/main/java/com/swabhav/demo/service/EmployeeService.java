@@ -10,13 +10,14 @@ import com.swabhav.demo.entity.Employee;
 import com.swabhav.demo.exception.EmployeeNotFoundException;
 import com.swabhav.demo.repository.EmployeeRepository;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class EmployeeService {
 
-    private final EmployeeRepository employeeRepository;
+    private  EmployeeRepository employeeRepository;
 
     public EmployeeResponse createEmployee(EmployeeRequest request) {
 
